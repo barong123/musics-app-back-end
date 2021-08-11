@@ -4,7 +4,7 @@ const Hapi = require('@hapi/hapi');
 const songs = require('./api/songs');
 const SongsService = require('./services/postgres/MusicService');
 const SongsValidator = require('./validator/songs');
-const ClientError = require('./exceptions/ClientError');
+const errorHandler = require('./errorHandler');
 
 const init = async () => {
   const songsService = new SongsService();
@@ -27,34 +27,7 @@ const init = async () => {
     },
   });
 
-  server.ext('onPreResponse', (request, h) => {
-    // mendapatkan konteks response dari request
-    const { response } = request;
-
-    if (response instanceof ClientError) {
-      // membuat response baru dari response toolkit sesuai kebutuhan error handling
-      const newResponse = h.response({
-        status: 'fail',
-        message: response.message,
-      });
-      newResponse.code(response.statusCode);
-      return newResponse;
-    }
-
-    // The following error 500 handler is still not working
-    if (h.response.code === 500) {
-      const newResponse = h.response({
-        status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
-      });
-      response.code(500);
-      // console.error(error);
-      return newResponse;
-    }
-
-    // jika bukan ClientError, lanjutkan dengan response sebelumnya (tanpa terintervensi)
-    return response.continue || response;
-  });
+  server.ext('onPreResponse', errorHandler);
 
   await server.start();
   console.log(`Server berjalan pada ${server.info.uri}`);
