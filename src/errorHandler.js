@@ -26,5 +26,6 @@ module.exports = (request, h) => {
   }
 
   // jika bukan ClientError, lanjutkan dengan response sebelumnya (tanpa terintervensi)
-  return response.continue || response;
+  // return response.continue || response;
+  return response;
 };

@@ -28,16 +28,6 @@ class SongsHandler {
     });
     response.code(201);
     return response;
-
-    // // Server ERROR!
-    // const response = h.response({
-    //   status: 'error',
-    //   message: 'Maaf, terjadi kegagalan pada server kami.',
-    // });
-    // response.code(500);
-    // console.error(error);
-    // return response;
-    // }
   }
 
   async getSongsHandler() {
@@ -60,16 +50,6 @@ class SongsHandler {
         song,
       },
     };
-
-    //   // Server ERROR!
-    //   const response = h.response({
-    //     status: 'error',
-    //     message: 'Maaf, terjadi kegagalan pada server kami.',
-    //   });
-    //   response.code(500);
-    //   console.error(error);
-    //   return response;
-    // }
   }
 
   async putSongByIdHandler(request) {
@@ -83,16 +63,6 @@ class SongsHandler {
       status: 'success',
       message: 'Catatan berhasil diperbarui',
     };
-
-    //   // Server ERROR!
-    //   const response = h.response({
-    //     status: 'error',
-    //     message: 'Maaf, terjadi kegagalan pada server kami.',
-    //   });
-    //   response.code(500);
-    //   console.error(error);
-    //   return response;
-    // }
   }
 
   async deleteSongByIdHandler(request) {
@@ -102,16 +72,6 @@ class SongsHandler {
       status: 'success',
       message: 'Catatan berhasil dihapus',
     };
-
-    //   // Server ERROR!
-    //   const response = h.response({
-    //     status: 'error',
-    //     message: 'Maaf, terjadi kegagalan pada server kami.',
-    //   });
-    //   response.code(500);
-    //   console.error(error);
-    //   return response;
-    // }
   }
 }
 
