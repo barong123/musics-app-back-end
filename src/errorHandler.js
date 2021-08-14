@@ -21,7 +21,7 @@ module.exports = (request, h) => {
       message: 'Maaf, terjadi kegagalan pada server kami.',
     });
     newResponse.code(500);
-    // console.error(error);
+    console.error(response);
     return newResponse;
   }
 

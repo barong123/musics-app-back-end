@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 const autoBind = require('auto-bind');
 // const ClientError = require('../../exceptions/ClientError');
 

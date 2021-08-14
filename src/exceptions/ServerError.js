@@ -1,3 +1,4 @@
+// still doesn't work
 class ServerError extends Error {
   constructor(message = 'Maaf, terjadi kegagalan pada server kami.', statusCode = 500) {
     super(message);
