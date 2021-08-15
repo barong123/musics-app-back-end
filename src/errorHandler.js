@@ -4,6 +4,15 @@ module.exports = (request, h) => {
   // mendapatkan konteks response dari request
   const { response } = request;
 
+  if (response?.output?.statusCode === 401) {
+    const newResponse = h.response({
+      status: 'fail',
+      message: response.output.payload.message,
+    });
+    newResponse.code(response.output.payload.statusCode);
+    return newResponse;
+  }
+
   if (response instanceof ClientError) {
     // membuat response baru dari response toolkit sesuai kebutuhan error handling
     const newResponse = h.response({
@@ -26,6 +35,5 @@ module.exports = (request, h) => {
   }
 
   // jika bukan ClientError, lanjutkan dengan response sebelumnya (tanpa terintervensi)
-  // return response.continue || response;
-  return response;
+  return response.continue || response;
 };
