@@ -29,7 +29,11 @@ class PlaylistsService {
 
   async getPlaylists(owner) {
     const query = {
-      text: 'SELECT playlists.id, playlists.name, users.username FROM playlists LEFT JOIN users ON playlists.owner = users.id WHERE playlists.owner = $1',
+      text: `SELECT playlists.id, playlists.name, users.username 
+      FROM playlists
+      INNER JOIN users ON playlists.owner = users.id
+      LEFT JOIN collaborations ON collaborations.playlist_id = playlists.id 
+      WHERE playlists.owner = $1 OR collaborations.user_id = $1`,
       values: [owner],
     };
 
@@ -69,16 +73,16 @@ class PlaylistsService {
     }
   }
 
-  async verifyPlaylistAccess(noteId, userId) {
+  async verifyPlaylistAccess(playlistId, userId) {
     try {
-      await this.verifyNoteOwner(noteId, userId);
+      await this.verifyPlaylistOwner(playlistId, userId);
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw error;
       }
 
       try {
-        await this._collaborationService.verifyCollaborator(noteId, userId);
+        await this._collaborationService.verifyCollaborator(playlistId, userId);
       } catch {
         throw error;
       }
