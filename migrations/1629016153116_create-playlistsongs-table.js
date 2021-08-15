@@ -2,6 +2,23 @@
 
 exports.shorthands = undefined;
 
-exports.up = pgm => {};
+exports.up = (pgm) => {
+  pgm.createTable('playlistsongs', {
+    id: {
+      type: 'VARCHAR(50)',
+      primaryKey: true,
+    },
+    playlist_id: {
+      type: 'VARCHAR(50)',
+      foreignKey: true,
+    },
+    song_id: {
+      type: 'TEXT',
+      foreignKey: true,
+    },
+  });
+};
 
-exports.down = pgm => {};
+exports.down = (pgm) => {
+  pgm.dropTable('playlistsongs');
+};
