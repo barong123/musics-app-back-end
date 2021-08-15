@@ -1,5 +1,6 @@
 const autoBind = require('auto-bind');
 // const ClientError = require('../../exceptions/ClientError');
+const successResponse = require('../../utils/responses/successResponse');
 
 class SongsHandler {
   constructor(service, validator) {
@@ -18,59 +19,48 @@ class SongsHandler {
       title, year, performer, genre, duration,
     });
 
-    const response = h.response({
-      status: 'success',
+    return h.response(successResponse({
       message: 'Lagu berhasil ditambahkan',
-      data: {
-        songId,
-      },
-    });
-    response.code(201);
-    return response;
+      data: { songId },
+    }))
+      .code(201);
   }
 
   async getSongsHandler() {
     const songs = await this._service.getSongs();
 
-    return {
-      status: 'success',
-      data: {
-        songs,
-      },
-    };
+    return successResponse({
+      data: { songs },
+    });
   }
 
   async getSongByIdHandler(request) {
     const { id } = request.params;
     const song = await this._service.getSongById(id);
-    return {
-      status: 'success',
-      data: {
-        song,
-      },
-    };
+
+    return successResponse({
+      data: { song },
+    });
   }
 
   async putSongByIdHandler(request) {
-    // try {
     this._validator.validateSongPayload(request.payload);
     const { id } = request.params;
 
     await this._service.editSongById(id, request.payload);
 
-    return {
-      status: 'success',
+    return successResponse({
       message: 'Catatan berhasil diperbarui',
-    };
+    });
   }
 
   async deleteSongByIdHandler(request) {
     const { id } = request.params;
     await this._service.deleteSongById(id);
-    return {
-      status: 'success',
+
+    return successResponse({
       message: 'Catatan berhasil dihapus',
-    };
+    });
   }
 }
 

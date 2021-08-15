@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
-const errorHandler = require('./errorHandler');
+const errorHandler = require('./utils/errorHandler');
 
 // songs
 const songs = require('./api/songs');

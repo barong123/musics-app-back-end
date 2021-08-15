@@ -3,3 +3,4 @@ package-lock.json
 LICENSE
 .env
 prod.env
+/src/exceptions/ServerError.js

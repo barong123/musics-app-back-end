@@ -1,6 +1,5 @@
 const autoBind = require('auto-bind');
-// const ClientError = require('../../exceptions/ClientError');
-const successResponse = require('../../successResponse');
+const successResponse = require('../../utils/responses/successResponse');
 
 class PlaylistsHandler {
   constructor(service, validator) {

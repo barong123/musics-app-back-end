@@ -1,5 +1,5 @@
 const autoBind = require('auto-bind');
-const successResponse = require('../../successResponse');
+const successResponse = require('../../utils/responses/successResponse');
 
 class CollaborationsHandler {
   constructor(collaborationsService, playlistsService, validator) {
@@ -19,9 +19,7 @@ class CollaborationsHandler {
 
     return h.response(successResponse({
       message: 'Kolaborasi berhasil ditambahkan',
-      data: {
-        collaborationId,
-      },
+      data: { collaborationId },
     }))
       .code(201);
   }

@@ -1,5 +1,5 @@
 const autoBind = require('auto-bind');
-const successResponse = require('../../successResponse');
+const successResponse = require('../../utils/responses/successResponse');
 
 class UsersHandler {
   constructor(service, validator) {
