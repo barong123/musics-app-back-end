@@ -1,14 +1,8 @@
-module.exports = function successResponse({ message = '', data = {} }) {
-  if (JSON.stringify(data) !== JSON.stringify({})) {
-    return {
-      status: 'success',
-      message,
-      data,
-    };
-  }
-
-  return {
+module.exports = function failResponse(h, { message, statusCode }) {
+  const response = {
     status: 'fail',
     message,
   };
+
+  return h.response(response).code(statusCode);
 };

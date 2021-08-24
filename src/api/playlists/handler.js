@@ -18,30 +18,30 @@ class PlaylistsHandler {
       name, owner: credentialId,
     });
 
-    return h.response(successResponse({
+    return successResponse(h, {
       message: 'Playlist berhasil ditambahkan',
       data: { playlistId },
-    }))
-      .code(201);
+      statusCode: 201,
+    });
   }
 
-  async getPlaylistsHandler(request) {
+  async getPlaylistsHandler(request, h) {
     const { id: credentialId } = request.auth.credentials;
     const playlists = await this._service.getPlaylists(credentialId);
 
-    return successResponse({
+    return successResponse(h, {
       data: { playlists },
     });
   }
 
-  async deletePlaylistByIdHandler(request) {
+  async deletePlaylistByIdHandler(request, h) {
     const { id } = request.params;
     const { id: credentialId } = request.auth.credentials;
 
     await this._service.verifyPlaylistOwner(id, credentialId);
     await this._service.deletePlaylistById(id);
 
-    return successResponse({ message: 'Playlist berhasil dihapus' });
+    return successResponse(h, { message: 'Playlist berhasil dihapus' });
   }
 }
 

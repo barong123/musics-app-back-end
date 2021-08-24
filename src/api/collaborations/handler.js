@@ -17,14 +17,14 @@ class CollaborationsHandler {
     await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
     const collaborationId = await this._collaborationsService.addCollaboration(playlistId, userId);
 
-    return h.response(successResponse({
+    return successResponse(h, {
       message: 'Kolaborasi berhasil ditambahkan',
       data: { collaborationId },
-    }))
-      .code(201);
+      statusCode: 201,
+    });
   }
 
-  async deleteCollaborationHandler(request) {
+  async deleteCollaborationHandler(request, h) {
     this._validator.validateCollaborationPayload(request.payload);
     const { id: credentialId } = request.auth.credentials;
     const { playlistId, userId } = request.payload;
@@ -32,7 +32,7 @@ class CollaborationsHandler {
     await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
     await this._collaborationsService.deleteCollaboration(playlistId, userId);
 
-    return successResponse({ message: 'Kolaborasi berhasil dihapus' });
+    return successResponse(h, { message: 'Kolaborasi berhasil dihapus' });
   }
 }
 

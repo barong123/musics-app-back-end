@@ -1,14 +1,13 @@
-module.exports = function successResponse({ message = '', data = {} }) {
+module.exports = function successResponse(h, { message = '', data = {}, statusCode = 200 }) {
+  const response = { status: 'success' };
+
   if (JSON.stringify(data) !== JSON.stringify({})) {
-    return {
-      status: 'success',
-      message,
-      data,
-    };
+    response.data = data;
   }
 
-  return {
-    status: 'success',
-    message,
-  };
+  if (message) {
+    response.message = message;
+  }
+
+  return h.response(response).code(statusCode);
 };

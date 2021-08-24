@@ -20,25 +20,25 @@ class PlaylistSongsHandler {
 
     await this._service.addPlaylistSong({ playlistId, songId });
 
-    return h.response(successResponse({
+    return successResponse(h, {
       message: 'Lagu berhasil ditambahkan ke playlist',
-    }))
-      .code(201);
+      statusCode: 201,
+    });
   }
 
-  async getPlaylistSongsHandler(request) {
+  async getPlaylistSongsHandler(request, h) {
     const { playlistId } = request.params;
     const { id: credentialId } = request.auth.credentials;
     await this._playlistsService.verifyPlaylistAccess(playlistId, credentialId);
 
     const songs = await this._service.getPlaylistSongs(playlistId);
 
-    return successResponse({
+    return successResponse(h, {
       data: { songs },
     });
   }
 
-  async deletePlaylistSongByIdHandler(request) {
+  async deletePlaylistSongByIdHandler(request, h) {
     this._validator.validateDeletePlaylistSongPayload(request.payload);
 
     const { playlistId } = request.params;
@@ -49,7 +49,7 @@ class PlaylistSongsHandler {
 
     await this._service.deletePlaylistSongById(songId, playlistId);
 
-    return successResponse({ message: 'Lagu berhasil dihapus dari playlist' });
+    return successResponse(h, { message: 'Lagu berhasil dihapus dari playlist' });
   }
 }
 
