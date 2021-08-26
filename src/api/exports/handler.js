@@ -17,11 +17,11 @@ class ExportsHandler {
     await this._playlistsService.verifyPlaylistAccess(playlistId, userId);
 
     const message = {
-      userId,
+      playlistId,
       targetEmail: request.payload.targetEmail,
     };
 
-    await this._service.sendMessage('export:playlists', JSON.stringify(message));
+    await this._service.sendMessage('export:playlist', JSON.stringify(message));
 
     return successResponse(h, {
       message: 'Permintaan Anda dalam antrean',

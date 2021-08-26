@@ -4,8 +4,9 @@ const InvariantError = require('../../exceptions/InvariantError');
 const NotFoundError = require('../../exceptions/NotFoundError');
 
 class PlaylistSongsService {
-  constructor() {
+  constructor(cacheService) {
     this._pool = new Pool();
+    this._cacheService = cacheService;
   }
 
   async addPlaylistSong({ playlistId, songId }) {
@@ -21,20 +22,30 @@ class PlaylistSongsService {
     if (!result.rows[0].id) {
       throw new InvariantError('Lagu gagal ditambahkan ke playlist');
     }
+
+    await this._cacheService.delete(`playlistSongs:${playlistId}`);
   }
 
   async getPlaylistSongs(playlistId) {
-    const query = {
-      text: `SELECT songs.id, songs.title, songs.performer
-      FROM playlists
-      INNER JOIN playlistsongs ON playlistsongs.playlist_id = playlists.id
-      INNER JOIN songs ON songs.id = playlistsongs.song_id
-      WHERE playlists.id = $1`,
-      values: [playlistId],
-    };
+    try {
+      const result = await this._cacheService.get(`playlistSongs:${playlistId}`);
+      return JSON.parse(result);
+    } catch (error) {
+      const query = {
+        text: `SELECT songs.id, songs.title, songs.performer
+        FROM playlists
+        INNER JOIN playlistsongs ON playlistsongs.playlist_id = playlists.id
+        INNER JOIN songs ON songs.id = playlistsongs.song_id
+        WHERE playlists.id = $1`,
+        values: [playlistId],
+      };
 
-    const result = await this._pool.query(query);
-    return result.rows;
+      const result = await this._pool.query(query);
+
+      await this._cacheService.set(`playlistSongs:${playlistId}`, JSON.stringify(result.rows));
+
+      return result.rows;
+    }
   }
 
   async deletePlaylistSongById(songId, playlistId) {
@@ -48,6 +59,8 @@ class PlaylistSongsService {
     if (!result.rows.length) {
       throw new NotFoundError('Lagu gagal dihapus dari playlist. Id tidak ditemukan');
     }
+
+    await this._cacheService.delete(`playlistSongs:${playlistId}`);
   }
 }
 
